@@ -5,7 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     public int _health;
-    
+
     public void TakeHit(int damage)
     {
         _health -= damage;
@@ -18,5 +18,9 @@ public class Health : MonoBehaviour
     public void SetHealth(int health)
     {
         _health += health;
+        if(_health >= 100)
+        {
+            _health = 100;
+        }
     }
 }

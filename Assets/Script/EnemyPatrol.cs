@@ -8,33 +8,34 @@ public class EnemyPatrol : MonoBehaviour
     public GameObject _rightBorder;
     public Rigidbody2D _rigidbody;
     public SpriteRenderer _renderer;
-    public Animator _animator;
-
+    public GraundDetection _graundDetection;
     public bool _isRightDirection;
-
+    public CollisionDamage _collisionDamage;
     public float speed;
 
     private void Update()
     {
-        if(_isRightDirection)
+
+        if(_graundDetection._isGraund)
         {
-            _rigidbody.velocity = Vector2.right * speed;
-            if(transform.position.x > _rightBorder.transform.position.x)
-            {
-                _isRightDirection = !_isRightDirection;
-                _renderer.flipX = false;
-            }
-            
-        }
-        else
-        {
-            _rigidbody.velocity = Vector2.left * speed;
-            if(transform.position.x < _leftBorder.transform.position.x)
-            {
+            if (transform.position.x > _rightBorder.transform.position.x || _collisionDamage.Direction < 0)
+
+                _isRightDirection = false;
+            else if (transform.position.x < _leftBorder.transform.position.x || _collisionDamage.Direction > 0)
                 _isRightDirection = true;
-                _renderer.flipX = true;
-            }
+            _rigidbody.velocity = _isRightDirection ? Vector2.right : Vector2.left;
+            _rigidbody.velocity *= speed;
         }
+
+        if(_rigidbody.velocity.x > 0)
+        {
+            _renderer.flipX = true;
+        }
+        if (_rigidbody.velocity.x < 0)
+        {
+            _renderer.flipX = false;
+        }
+
     }
 
 

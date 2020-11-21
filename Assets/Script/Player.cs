@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private Vector3 direction;
     public GraundDetection _graundDetection;
+    private bool _isJumping = false;
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -18,13 +19,17 @@ public class Player : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+  
 
     void FixedUpdate()
     {
         _animator.SetBool("isGrounded", _graundDetection._isGraund);
+        if(!_isJumping && !_graundDetection._isGraund)
+        {
+            _animator.SetTrigger("StartFal");
+        }
+
         direction = Vector3.zero;
-        
-       
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
@@ -53,7 +58,8 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && _graundDetection._isGraund)
         {
             _rigidbody.AddForce(Vector2.up * _speedJump, ForceMode2D.Impulse);
-            _animator.SetTrigger("TriggerJump");       
+            _animator.SetTrigger("TriggerJump");
+            _isJumping = true;
         }
 
        
