@@ -12,6 +12,10 @@ public class Player : MonoBehaviour
     private Vector3 direction;
     public GraundDetection _graundDetection;
     private bool _isJumping = false;
+    [SerializeField] private GameObject gameObjectArrow;
+    [SerializeField] private Transform _transform;
+    [SerializeField] private float force;
+    [SerializeField] private bool isReload;
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -20,7 +24,6 @@ public class Player : MonoBehaviour
     }
 
   
-
     void FixedUpdate()
     {
         _animator.SetBool("isGrounded", _graundDetection._isGraund);
@@ -64,5 +67,30 @@ public class Player : MonoBehaviour
 
        
         _animator.SetFloat("Speed",Mathf.Abs( direction.x));
+        
+    }
+
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && isReload == true)
+        {
+            _animator.SetTrigger("Archery");
+        }
+    }
+
+    void CheckShoot()
+    { 
+        GameObject prefab = Instantiate(gameObjectArrow, _transform.position, Quaternion.identity);
+        prefab.GetComponent<Arrow>().SetImpuls(Vector2.right, _spriteRenderer.flipX ? -force * 5 : force * 5);
+        isReload = false;
+        StartCoroutine(ReloadArow());
+    }
+
+    private IEnumerator ReloadArow()
+    {
+        yield return new WaitForSeconds(3f);
+            isReload = true;
+        yield break;
     }
 }

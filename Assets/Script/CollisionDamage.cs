@@ -33,4 +33,5 @@ public class CollisionDamage : MonoBehaviour
         direction = 0;
         _animator.SetFloat("Direction", 0f);
     }
+
 }
