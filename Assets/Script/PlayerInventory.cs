@@ -5,13 +5,14 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     public int _coinsCount;
-
+    
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.gameObject.CompareTag("Coin"))
+        if(GameManager.Instance.coinsContainer.ContainsKey(col.gameObject))
         {
-            _coinsCount += 1;
-            Destroy(col.gameObject);
+            _coinsCount ++;
+            var coins = GameManager.Instance.coinsContainer[col.gameObject];
+            coins.StartDestroy();
         }
 
         if(col.gameObject.CompareTag("HelthPotion"))
@@ -20,5 +21,10 @@ public class PlayerInventory : MonoBehaviour
             Destroy(col.gameObject);
         }
     }
-
+    private void Update()
+    {
+        _coinsCount += Coins._coinsCount;
+    }
 }
+
+

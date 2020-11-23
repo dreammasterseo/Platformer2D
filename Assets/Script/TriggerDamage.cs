@@ -6,6 +6,15 @@ public class TriggerDamage : MonoBehaviour
 {
     [SerializeField] private int damage;
     [SerializeField] private bool isCollisionDamage;
+    private IoObjectDestroy destroy;
+
+    
+
+    public void Init(IoObjectDestroy destroy)
+    {
+        this.destroy = destroy;
+    }
+
     public int Damage
     {
         get { return damage; }
@@ -18,17 +27,26 @@ public class TriggerDamage : MonoBehaviour
     {
         if(col.gameObject.CompareTag("Enemy"))
         {
-            var health = col.gameObject.GetComponent<Health>();
-            if(health != null)
+           
+
+            if(GameManager.Instance.healthContainer.ContainsKey(col.gameObject))
             {
+                var health = GameManager.Instance.healthContainer[col.gameObject];
                 health.TakeHit(damage);
             }
+
             if(isCollisionDamage == true)
             {
-                Destroy(gameObject);
-            }
-           
+                if (destroy == null)
+                    Destroy(gameObject);
+                else
+                    destroy.Destroy(gameObject);
+            } 
         }
     }
 
+}
+ public interface IoObjectDestroy
+{
+    void Destroy(GameObject gameObject);
 }
