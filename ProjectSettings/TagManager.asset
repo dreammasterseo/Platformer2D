@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - Coin
   - HelthPotion
+  - PoisonousMoos
+  - brokenCrystals
   layers:
   - Default
   - TransparentFX

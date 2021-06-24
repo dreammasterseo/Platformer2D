@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TriggerDamage : MonoBehaviour
 {
-    [SerializeField] private int damage;
+    [SerializeField] private float damage;
     [SerializeField] private bool isCollisionDamage;
     private IoObjectDestroy destroy;
 
@@ -15,20 +15,28 @@ public class TriggerDamage : MonoBehaviour
         this.destroy = destroy;
     }
 
-    public int Damage
+    public float Damage
     {
         get { return damage; }
         set { damage = value; }
     }
-   
 
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        if(col.gameObject.CompareTag("Player"))
+        {
+            if(GameManager.Instance.healthContainer.ContainsKey(col.gameObject))
+            {
+                var health = GameManager.Instance.healthContainer[col.gameObject];
+                    health.TakeHit(damage);
+            }
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if(col.gameObject.CompareTag("Enemy"))
-        {
-           
-
+        {      
             if(GameManager.Instance.healthContainer.ContainsKey(col.gameObject))
             {
                 var health = GameManager.Instance.healthContainer[col.gameObject];
@@ -44,8 +52,9 @@ public class TriggerDamage : MonoBehaviour
             } 
         }
     }
-
 }
+
+
  public interface IoObjectDestroy
 {
     void Destroy(GameObject gameObject);
